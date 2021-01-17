@@ -4,7 +4,7 @@ var fileupload = require("express-fileupload");
 const app = express();
 
 app.use(fileupload());
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 app.get("/", (_, res) => {
   res.sendFile(__dirname + "/public/index.html");
