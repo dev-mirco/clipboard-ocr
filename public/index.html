@@ -1,0 +1,20 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clipboard OCR</title>
+  </head>
+  <body></body>
+  <script>
+    window.addEventListener("paste", (ev) => {
+      const img = ev.clipboardData.items[0].getAsFile();
+      console.log(img);
+      const fromData = new FormData();
+      fromData.append("img", img, "image.png");
+      fetch("/ocr", { method: "POST", body: fromData }).then(async (res) => {
+        const text = await res.text();
+        document.getElementsByTagName("body")[0].innerText = text;
+      });
+    });
+  </script>
+</html>
