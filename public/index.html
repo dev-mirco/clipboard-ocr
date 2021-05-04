@@ -7,14 +7,18 @@
   <body></body>
   <script>
     window.addEventListener("paste", (ev) => {
-      const img = ev.clipboardData.items[0].getAsFile();
-      console.log(img);
-      const fromData = new FormData();
-      fromData.append("img", img, "image.png");
-      fetch("/ocr", { method: "POST", body: fromData }).then(async (res) => {
-        const text = await res.text();
-        document.getElementsByTagName("body")[0].innerText = text;
-      });
+      try {
+        const img = ev.clipboardData.items[0]?.getAsFile();
+        if (!img) throw new Error();
+        const fromData = new FormData();
+        fromData.append("img", img, "image.png");
+        fetch("/ocr", { method: "POST", body: fromData }).then(async (res) => {
+          const text = await res.text();
+          document.getElementsByTagName("body")[0].innerText = text;
+        });
+      } catch (error) {
+        alert("Not an image!!!");
+      }
     });
   </script>
 </html>

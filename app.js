@@ -11,13 +11,17 @@ app.get("/", (_, res) => {
 });
 
 app.post("/ocr", (req, res) => {
-  const { spawn } = require("child_process");
+  try {
+    const { spawn } = require("child_process");
 
-  const child = spawn("tesseract", ["stdin", "stdout"]);
-  child.stdout.on("data", (data) => res.send(data));
-  child.stdout.on("error", console.log);
-  child.stdin.write(req.files.img.data);
-  child.stdin.end();
+    const child = spawn("tesseract", ["stdin", "stdout"]);
+    child.stdout.on("data", (data) => res.send(data));
+    child.stdout.on("error", console.log);
+    child.stdin.write(req.files.img.data);
+    child.stdin.end();
+  } catch (error) {
+    res.send("");
+  }
 });
 
 app.listen(port, () => {
